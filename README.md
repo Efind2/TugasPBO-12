@@ -67,64 +67,74 @@ Setelah File jadi anda bisa membuat tampilan layout anda sesuka hati, namun layo
 
         }
 
+- Kode Tampil Data ke Tabel
 
+        private void tampil1() {
 
-  
+        EntityManager em = Persistence.createEntityManagerFactory("TugasPersis").createEntityManager();
 
+        try {
+            List<Matakuliah> hasil = em.createNamedQuery("Matakuliah.findAll", Matakuliah.class).getResultList();
 
-## Cara Penggunaan
-Buat java frame yang berisi program untuk CRUD (create, read, update, delete) Cetak dan Upload(untuk button mengimport file csv)  kemudian hubungkan Netbeans dengan database di PostgreSql dan juga tambahkan liblary di projeck yang digunakan. tambahkan kode dibawah ini pada button Upload
-
-    JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-        int returnValue = jfc.showOpenDialog(null);
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File filePilihan = jfc.getSelectedFile();
-            System.out.println("yang dipilih : " + filePilihan.getAbsolutePath());
-            try {
-                BufferedReader br = new BufferedReader(new FileReader(filePilihan));
-                String baris = new String("");
-                String pemisah = ";";
-                while ((baris = br.readLine()) != null) //returns a Boolean value
-                {
-                    String[] dataMhs = baris.split(pemisah);
-                    String kodemk = dataMhs[0];
-                    String sks = dataMhs[1];
-                    String namamk = dataMhs[2];
-                    String semester = dataMhs[3];
-                    
-                    if (!kodemk.isEmpty() && !namamk.isEmpty()) {
-                        conn = DriverManager.getConnection(koneksi, user, password);
-                        conn.setAutoCommit(false);
-                        String sql = "INSERT INTO matakuliah VALUES(?,?,?,?)";
-                        pstmt = conn.prepareStatement(sql);
-  
-                        pstmt.setString(1, kodemk);
-                        pstmt.setInt(2, Integer.parseInt(sks));
-                        pstmt.setString(3, namamk);
-                        pstmt.setInt(4, Integer.parseInt(semester));
-                        pstmt.executeUpdate();
-                        conn.commit();
-                        pstmt.close();
-                        conn.close();
-                    }
-                }
-                JOptionPane.showMessageDialog(null, "Data berhasil diupload");
-                tampil();
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(ReportMataKuliah.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(ReportMataKuliah.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
-                Logger.getLogger(ReportMataKuliah.class.getName()).log(Level.SEVERE, null, ex);
+            DefaultTableModel tbmk = new DefaultTableModel(new String[]{"Kode Mata Kuliah","SKS","Nama Mata Kuliah", "Semester"}, 0);
+            for (Matakuliah data : hasil) {
+                tbmk.addRow(new Object[]{
+                    data.getKodemk(),
+                    data.getNamamk(),
+                    data.getSks(),
+                    data.getSemesterajar()
+                });
             }
-        }                       
-     
-Saat button upload di klik maka tampilan akan muncul seperti ini
-![image](https://github.com/user-attachments/assets/f209e6b2-9ede-4b0e-99a0-ffb93dbac167)
-carilah file csv yang akan anda upload usahakan file csvnya sesuai dengan database anda dan tidak ada data primary key yang sama
+            tabelMatakuliah.setModel(tbmk);
+        } finally {
+            reset();
+            em.close();
+        }
+
+        }
+
+- Kode Update Data
+
+        private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {                                          
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("TugasPersis");
+        EntityManager em = emf.createEntityManager();
+
+        em.getTransaction().begin();
+        Matakuliah matakuliah = em.find(Matakuliah.class, txtKodemk.getText());
+        if (matakuliah != null) {
+            matakuliah.setSks(Integer.parseInt(txtSKS.getText()));
+            matakuliah.setNamamk(txtNamaMk.getText());
+            matakuliah.setSemesterajar(Integer.parseInt(txtSemesterAjar.getText()));
+
+        }
+        em.getTransaction().commit();
+        em.close();
+        emf.close();
+        tampil1();
+        reset();
+
+        }
+
+- Kode Hapus Data
+
+        private void btnhapusActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("TugasPersis");
+        EntityManager em = emf.createEntityManager();
+
+        em.getTransaction().begin();
+        Matakuliah matakuliah = em.find(Matakuliah.class, txtKodemk.getText());
+        if (matakuliah != null) {
+            em.remove(matakuliah);
+        }
+        em.getTransaction().commit();
+        em.close();
+        emf.close();
+        tampil1();
+        }
 
 
-mungkin itu saya yang dapat saya jelaskan 😄
+## Kode SQl 
+
 
 
 
