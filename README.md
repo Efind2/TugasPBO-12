@@ -134,6 +134,14 @@ Setelah File jadi anda bisa membuat tampilan layout anda sesuka hati, namun layo
 
 
 ## Kode SQl 
+  
+  CREATE TABLE mata_kuliah (
+    kodemk CHAR(10) NOT NULL PRIMARY KEY,
+    sks INTEGER NOT NULL,
+    namamk VARCHAR(30),
+    semesterajar INTEGER
+  );
+
 
 
 
