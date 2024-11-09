@@ -1,5 +1,5 @@
-# Upload File Csv
-Hallo Semua 😄👋 Pada Tugas Pemograman Berorientasi Objek ini, saya menerapkan program CRUD (Create, Read, Update, Delete)  dan  penggunaan jasper juga upload file csv pada java GUI(Graphical User Interfaces) dengan IDE netbeans. Untuk mengimplementasikan program tersebut saya menggunakan bahasa pemrograman java dan menggunakan aplikasi pengelola database yaitu postgreSQL dan juga plugin iReport.
+# Persistence
+Hallo Semua 😄👋 Pada Tugas Pemograman Berorientasi Objek ini, saya menerapkan program CRUD (Create, Read, Update, Delete)  dan  penggunaan jasper juga upload file csv pada java GUI(Graphical User Interfaces) dengan IDE netbeans dan yang utama disini saya menggunakan **persistence**. Untuk mengimplementasikan program tersebut saya menggunakan bahasa pemrograman java dan menggunakan aplikasi pengelola database yaitu postgreSQL dan juga plugin iReport.
 dan saya menggunakan tabel  entitas Matakuliah dengan atribut Kode MK, SKS, NamaMk, Semester Ajar.
 ## Aplikasi
 - IDE NetBeans 16
@@ -8,7 +8,9 @@ dan saya menggunakan tabel  entitas Matakuliah dengan atribut Kode MK, SKS, Nama
 ## Plugin
 - [IReport 5.6.0](https://drive.google.com/drive/folders/1gbbMttGeyns5mqb-_hfIAuMjkTzb-XPZ?usp=sharing)
 ## Library
-- PostgreSQL JDBC Driver
+- PostgreSQL JDBC Driver `NetBeans`
+- EclipseLink (JPA 2.1) `NetBeans`
+- Persistence (JPA 2.1) `NetBeans`
 - [JasperReport](https://drive.google.com/drive/folders/1_i8xBCdLXeMcGdmnTWa2SEnL4oc2sW78?usp=sharing)
 ## Feature
 -  Melakukan insert data
@@ -26,6 +28,49 @@ Kemudain next pilih layout kemudain sesuaikan nama file jasper dengan apa yang a
 kemudian next pindah seluruh kolom ke kiri dan next lagi --finish.
 Setelah File jadi anda bisa membuat tampilan layout anda sesuka hati, namun layout anda harus berisi tabel yang ingin anda tampilkan atau cetak
 ![image](https://github.com/user-attachments/assets/7fd7d5f1-db54-43d7-bdac-57ac60bf4a10)
+
+## Cara Pembuatan Persistence 
+- Klik kiri pada package kemudian new lalu Entity Classes From Database
+  ![image](https://github.com/user-attachments/assets/af29d699-ec5e-4c7f-88e5-e9dc61d4af3c)
+- Kemudian buat koneksi ke database
+  ![image](https://github.com/user-attachments/assets/7b82d6d8-d439-453e-ae79-d0f1be96c05f)
+- Setelah terkoneksi semua tabel akan berada dikiri, kemudian pilih tabel yang akan digunkan dan pindah kekanan
+  ![image](https://github.com/user-attachments/assets/0a50dbec-804a-4ac7-9e31-2eabd5107c94)
+- Kemudian Klik Next
+  ![image](https://github.com/user-attachments/assets/3be1861f-7495-4274-9e9e-4a4cd2924ee9)
+- Lalu klik Finish
+  ![image](https://github.com/user-attachments/assets/e06e58c2-cc46-49e6-ac44-b59c3b36bd79)
+
+## Kode Persisten Untuk CRUD
+- Kode Tambah data
+
+        private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {                                          
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("TugasPersis");
+        EntityManager em = emf.createEntityManager();
+
+        em.getTransaction().begin();
+
+        Matakuliah satu = new Matakuliah();
+        satu.setKodemk(txtKodemk.getText());
+        satu.setNamamk(txtNamaMk.getText());
+        satu.setSemesterajar(Integer.parseInt(txtSemesterAjar.getText()));
+        satu.setSks(Integer.parseInt(txtSKS.getText()));
+
+        em.persist(satu);
+
+        em.getTransaction().commit();
+        em.close();
+        emf.close();
+        tampil1();
+        reset();
+
+        }
+
+
+
+  
+
 
 ## Cara Penggunaan
 Buat java frame yang berisi program untuk CRUD (create, read, update, delete) Cetak dan Upload(untuk button mengimport file csv)  kemudian hubungkan Netbeans dengan database di PostgreSql dan juga tambahkan liblary di projeck yang digunakan. tambahkan kode dibawah ini pada button Upload
